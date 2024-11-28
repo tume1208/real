@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test JSON POST</title>
+</head>
+<body>
+    <form id="jsonForm">
+        <textarea id="jsonData" rows="10" cols="50">
+{
+    "userId": 1,
+    "data": [
+        {"id": 101, "item": 2},
+        {"id": 102, "item": 1}
+    ]
+}
+        </textarea>
+        <button type="button" onclick="sendJson()">Send JSON</button>
+    </form>
+
+    <script>
+        function sendJson() {
+            const jsonData = document.getElementById('jsonData').value;
+            fetch('http://localhost/MAZAA/store_local_storage.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

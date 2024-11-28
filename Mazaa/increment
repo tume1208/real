@@ -1,0 +1,92 @@
+let shop = document.getElementById("pro-details");
+let basket = JSON.parse(localStorage.getItem("data")) || [];
+let generateShop =()=>{
+
+    return (shop.innerHTML = shopItemsData
+    .map((x) => {
+        let {id,name,price,img,link}=x;
+        let search = basket.find((x) => x.id === id) || [];       
+      return `
+       <div id=product-id-${id} class="single-pro-image">
+        <img src=${img} width="100%" id="Mainimg" alt="">
+
+        <div class="small-img-group">
+          <div class="small-img-col">
+            <img src="36.jpg" width="100%" class="small-img" alt="">
+          </div>
+          <div class="small-img-col">
+            <img src="37.jpg" width="100%" class="small-img" alt="">
+          </div>
+          <div class="small-img-col">
+            <img src="38.jpg" width="100%" class="small-img" alt="">
+          </div>
+          <div class="small-img-col">
+            <img src="14.jpg" width="100%" class="small-img" alt="">
+          </div>
+       </div>
+      </div>
+      <div class="single-pro-details">
+        <h6>Home / Toner</h6>
+        <h4>Advannced Snail 96 Mucin Power Essence</h4>
+        <h1>${prices}</h1>
+        <select>
+          <option> Toner</option>
+          <option> Gel Cleanser </option>
+          <option> Eye Cream </option>
+          <option> Sheet Mask </option>
+          <option> Intensive Ceam </option>
+        </select>
+        <button class="normal">
+        <i onclick="increment(${id})" class="fa-solid fa-plus"></i>
+        <div id=${id} class="quantity">
+        ${search.item === undefined ? 0 : search.item}
+        </div>
+        <div>Сагсанд хийх</div>
+        <i onclick="decrement(${id})" class="fa-solid fa-minus"></i>
+        </button>
+        <h4>Бүтээгдэхүүний мэдээлэл</h4>
+        <span>96% арьс арчилгааны найрлагатай, арьсыг сэргээх найрлагатай эмгэн хумсны шүүрлийн шүүлтүүрээр баяжуулсан
+          Арьсанд хурдан шингэж, дотроосоо байгалийн гэрэлтсэн байдлыг өгөх хөнгөн жинтэй эссенц. Энэхүү эссенц нь арьсыг чийгшүүлж, өдрийн турш гэрэлтүүлэх тэжээллэг, бага өдөөлттэй шүүлтүүртэй эмгэн хумсны шүүрлээс бүтсэн.
+          😊</span>
+      </div>
+      `;
+    })
+    .join(""));
+};
+
+generateShop();
+    let increment = (id) => {
+      let search = basket.find((x) => x.id === id);
+  
+      if (search === undefined) {
+          basket.push({
+              id: id,
+              item: 1,
+          });
+      } else {
+          search.item += 1;
+      }
+      update(id);
+      localStorage.setItem("data", JSON.stringify(basket));
+  };
+  
+  let decrement = (id) => {
+      let search = basket.find((x) => x.id === id);
+  
+      if (search === undefined || search.item === 0) return;
+      else {
+          search.item -= 1;
+      }
+      update(id);
+      basket = basket.filter((x) => x.item !== 0);
+      localStorage.setItem("data", JSON.stringify(basket));
+  };
+  
+  let update = (id) => {
+      let search = basket.find((x) => x.id === id);
+      document.getElementById(id).innerHTML = search.item;
+  };
+  
+  
+  
+  

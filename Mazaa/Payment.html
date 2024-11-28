@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+</head>
+<body>
+    <h1>Төлбөр төлөх</h1>
+    <div id="payment-instructions">
+        <p>To complete your payment, please scan the QR code below using your bank's app:</p>
+        <img src="images/pay.jpg" alt="Bank QR Code">
+        <p>Bank Account Number: 5309724847</p>
+        <p>Amount: <span id="amount"></span> MNT</p>
+    </div>
+    <div id="confirmation">
+        <h2>Payment Confirmation</h2>
+        <form id="confirmation-form" enctype="multipart/form-data">
+            <label for="receipt">Upload Receipt Image:</label>
+            <input type="file" id="receipt" name="receipt" accept="image/*" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+        // Generate a unique transaction ID
+        const transactionId = 'txn_' + Math.random().toString(36).substr(2, 9);
+
+        // Display the total cost
+        let totalCost = localStorage.getItem('totalCost');
+        document.getElementById('amount').textContent = totalCost;
+
+        // Handle form submission
+        document.getElementById('confirmation-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append('receipt', document.getElementById('receipt').files[0]);
+            formData.append('userId', localStorage.getItem('userId'));
+            formData.append('amount', totalCost);
+            formData.append('transactionId', transactionId);
+
+            try {
+                const response = await fetch('verify_payment.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                console.log(result); // Debugging: Log the result
+                if (result.success) {
+                    alert('Receipt uploaded successfully! Thank you for your purchase.');
+                } else {
+                    alert('Receipt upload failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
+
